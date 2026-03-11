@@ -6,7 +6,12 @@ void main() {
 
 enum Status { shortBreak, workHard }
 
-class PomodoroApp extends StatelessWidget {
+class PomodoroApp extends StatefulWidget {
+  @override
+  State<PomodoroApp> createState() => _PomodoroAppState();
+}
+
+class _PomodoroAppState extends State<PomodoroApp> {
   // atributos:
   var backgroundColor = Colors.green[50];
   var borderColor = Colors.green;
@@ -30,8 +35,8 @@ class PomodoroApp extends StatelessWidget {
       bigSplashColor = Colors.red[300];
       lightColor = Color.fromRGBO(255, 76, 76, 0.15);
       darkColor = Color.fromRGBO(255, 76, 76, 0.62);
-      title = "Short Break";
-      icon = Icons.coffee_outlined;
+      title = "Work Hard";
+      icon = Icons.work_outline;
     } else {
       status = Status.shortBreak;
       backgroundColor = Colors.green[50];
@@ -44,6 +49,8 @@ class PomodoroApp extends StatelessWidget {
       title = "Short Break";
       icon = Icons.coffee_outlined;
     }
+
+    setState(() {}); // reexecuta o método build()
   }
 
   @override
@@ -112,7 +119,7 @@ class PomodoroApp extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: changeStatus,
                   borderRadius: BorderRadius.circular(32),
                   splashColor: smallSplashColor,
                   child: Container(
