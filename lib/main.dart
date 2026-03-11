@@ -13,6 +13,8 @@ class PomodoroApp extends StatelessWidget {
   var bigSplashColor = Colors.green[300];
   var lightGreenColor = Color.fromRGBO(77, 218, 110, 0.15);
   var darkGreenColor = Color.fromRGBO(77, 218, 110, 0.62);
+  var title = "Short Break";
+  var icon = Icons.coffee_outlined;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,8 @@ class PomodoroApp extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(Icons.coffee_outlined, size: 18),
-                  Text("Short Break"),
+                  Icon(icon, size: 18),
+                  Text(title),
                 ],
               ),
             ),
