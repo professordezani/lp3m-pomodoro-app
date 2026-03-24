@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,6 +15,7 @@ class PomodoroApp extends StatefulWidget {
 
 class _PomodoroAppState extends State<PomodoroApp> {
   // atributos:
+  Timer? _timer;
   var backgroundColor = Colors.green[50];
   var borderColor = Colors.green;
   var textColor = Colors.green[900];
@@ -23,6 +26,13 @@ class _PomodoroAppState extends State<PomodoroApp> {
   var title = "Short Break";
   var icon = Icons.coffee_outlined;
   var status = Status.shortBreak;
+  var seconds = 15;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), onTick);
+  }
 
   // método:
   void changeStatus() {
@@ -37,6 +47,7 @@ class _PomodoroAppState extends State<PomodoroApp> {
       darkColor = Color.fromRGBO(255, 76, 76, 0.62);
       title = "Work Hard";
       icon = Icons.work_outline;
+      seconds = 45;
     } else {
       status = Status.shortBreak;
       backgroundColor = Colors.green[50];
@@ -48,13 +59,38 @@ class _PomodoroAppState extends State<PomodoroApp> {
       darkColor = Color.fromRGBO(77, 218, 110, 0.62);
       title = "Short Break";
       icon = Icons.coffee_outlined;
+      seconds = 15;
     }
 
     setState(() {}); // reexecuta o método build()
   }
 
+  void start() {
+    _timer = Timer.periodic(Duration(seconds: 1), onTick);
+  }
+
+  void stop() {
+    _timer?.cancel();
+    setState(() {});
+  }
+
+  void onTick(Timer _) {
+    if (seconds > 0) {
+      seconds = seconds - 1;
+      setState(() {});
+    } else {
+      changeStatus();
+    }
+  }
+
+  void increment10Seconds() {
+    setState(() => seconds += 10);
+  }
+
   @override
   Widget build(BuildContext context) {
+    var txtMinutes = (seconds ~/ 60).toString().padLeft(2, "0");
+    var txtSeconds = (seconds % 60).toString().padLeft(2, "0");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Material(
@@ -77,7 +113,7 @@ class _PomodoroAppState extends State<PomodoroApp> {
               ),
             ),
             Text(
-              "05\n00",
+              "$txtMinutes\n$txtSeconds",
               style: TextStyle(
                 color: textColor,
                 fontSize: 256,
@@ -91,7 +127,7 @@ class _PomodoroAppState extends State<PomodoroApp> {
               spacing: 16,
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: increment10Seconds,
                   borderRadius: BorderRadius.circular(32),
                   splashColor: smallSplashColor,
                   child: Container(
@@ -105,7 +141,7 @@ class _PomodoroAppState extends State<PomodoroApp> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: !_timer!.isActive ? start : stop,
                   borderRadius: BorderRadius.circular(32),
                   splashColor: bigSplashColor,
                   child: Container(
@@ -115,7 +151,10 @@ class _PomodoroAppState extends State<PomodoroApp> {
                       color: darkColor,
                       borderRadius: .circular(32),
                     ),
-                    child: Icon(Icons.play_arrow, size: 32),
+                    child: Icon(
+                      !_timer!.isActive ? Icons.play_arrow : Icons.pause,
+                      size: 32,
+                    ),
                   ),
                 ),
                 InkWell(
